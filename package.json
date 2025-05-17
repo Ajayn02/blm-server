@@ -6,7 +6,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "prisma": "prisma",
-    "build": "prisma generate"
+    "build": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
