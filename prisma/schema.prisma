@@ -13,11 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String
   password  String
   createdAt DateTime @default(now())
+  recovery  String
+
+  favorite Favorite[]
+  history  History[]
+}
+
+model Favorite {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  movieId Int
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model History {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  movieId Int
+
+  user User @relation(fields: [userId], references: [id])
 }

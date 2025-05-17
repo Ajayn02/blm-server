@@ -1,16 +1,16 @@
 const prisma = require("../../config/prisma")
 
-exports.signupUser = async ({ email, name, password }) => {
+exports.createUser = async ({ email, name, password, recovery }) => {
     try {
         return await prisma.user.create({
-            data: { email, name, password }
+            data: { email, name, password, recovery }
         })
     } catch (error) {
         throw new Error("Failed to create user")
     }
 }
 
-exports.signinUser = async ({ email }) => {
+exports.getUserByEmail = async ({ email }) => {
     try {
         return await prisma.user.findUnique({
             where: { email }
@@ -20,7 +20,16 @@ exports.signinUser = async ({ email }) => {
     }
 }
 
-exports.forgetPassword = async (req, res) => {
-
+exports.updateUser = async ({ email, data }) => {
+    try {
+        return await prisma.user.update({
+            where: { email },
+            data: { ...data }
+        })
+    } catch (error) {
+        throw new Error("Failed to update user")
+    }
 }
+
+
 
