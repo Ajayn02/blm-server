@@ -15,6 +15,8 @@ exports.addToFavorite = async (req, res) => {
         const newFavorite = await favoriteService.addFavorite({ movieId, userId })
         sendResponse(res, 200, true, "Favorite added", newFavorite)
     } catch (error) {
+        console.log(error);
+        
         sendResponse(res, 500, false, "Failed add favorite", null, error)
     }
 }
