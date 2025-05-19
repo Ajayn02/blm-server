@@ -6,15 +6,15 @@ const bcrypt = require('bcrypt')
 
 exports.signup = async (req, res) => {
     try {
-        const { name, email, password } = req.body
-        if (!name || !email || !password) {
+        const { name, username, password } = req.body
+        if (!name || !username || !password) {
             sendResponse(res, 400, false, "Name, Email and Password are required")
             return;
         }
         const recovery = generateRecoveryCode()
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await authService.createUser({ email, name, password: hashedPassword, recovery })
-        sendResponse(res, 201, true, "Signup successfull", { name: newUser.name, email: newUser.email, recovery: newUser.recovery })
+        const newUser = await authService.createUser({ username, name, password: hashedPassword, recovery })
+        sendResponse(res, 201, true, "Signup successfull", { name: newUser.name, username: newUser.username, recovery: newUser.recovery })
     } catch (error) {
         console.log(error);
         sendResponse(res, 500, false, "Signup failed", null, error)
@@ -23,12 +23,12 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
     try {
-        const { email, password } = req.body
-        if (!email || !password) {
+        const { username, password } = req.body
+        if (!username || !password) {
             sendResponse(res, 400, false, "Email and Password are required")
             return;
         }
-        const existing = await authService.getUserByEmail({ email })
+        const existing = await authService.getUserByEmail({ username })
 
         if (!existing) {
             sendResponse(res, 404, false, "User not found")
@@ -52,14 +52,14 @@ exports.signin = async (req, res) => {
 
 exports.forgetPassword = async (req, res) => {
     try {
-        const { email, code } = req.body
+        const { username, code } = req.body
 
-        if (!code || !email) {
+        if (!code || !username) {
             sendResponse(res, 400, false, "Recovery code and email are required")
             return;
         }
 
-        const user = await authService.getUserByEmail({ email })
+        const user = await authService.getUserByUsername({ username })
 
         if (!user || !user.recovery) {
             sendResponse(res, 404, false, "User not found")
@@ -79,16 +79,16 @@ exports.forgetPassword = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { username, password } = req.body
         const recovery = generateRecoveryCode()
-        const updatedUser = await authService.updateUser({ email, data: { recovery, password } })
+        const updatedUser = await authService.updateUser({ username, data: { recovery, password } })
 
         if (!updatedUser) {
             sendResponse(res, 404, false, "User not found")
             return;
         }
 
-        sendResponse(res, 200, true, "user updated successfully", { email: updatedUser.email, recovery: updatedUser.recovery, name: updatedUser.name })
+        sendResponse(res, 200, true, "user updated successfully", { username: updatedUser.username, recovery: updatedUser.recovery, name: updatedUser.name })
     } catch (error) {
         console.log(error);
         sendResponse(res, 500, false, "Failed to update user ", null, error)
