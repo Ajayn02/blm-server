@@ -21,8 +21,9 @@ model User {
   createdAt DateTime @default(now())
   recovery  String
 
-  favorite Favorite[]
-  history  History[]
+  favorite      Favorite[]
+  history       History[]
+  searchHistory SearchHistory[]
 }
 
 model Favorite {
@@ -37,6 +38,14 @@ model History {
   id      Int @id @default(autoincrement())
   userId  Int
   movieId Int
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model SearchHistory {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  searchkey String
 
   user User @relation(fields: [userId], references: [id])
 }

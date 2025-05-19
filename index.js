@@ -6,6 +6,7 @@ require('./src/config/prisma')
 const authRoutes = require('./src/modules/auth/auth.route')
 const favoriteRoutes = require('./src/modules/favorite/favorite.route')
 const historyRoutes = require('./src/modules/history/history.routes')
+const watchRoutes = require('./src/modules/search-history/searchHistory.route')
 
 
 const server = express()
@@ -19,6 +20,7 @@ server.use("/api", apiRouter);
 apiRouter.use("/auth", authRoutes)
 apiRouter.use("/favorites", favoriteRoutes)
 apiRouter.use("/history", historyRoutes)
+apiRouter.use("/search", watchRoutes)
 
 const PORT = 3001 || process.env.PORT
 
