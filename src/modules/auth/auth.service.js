@@ -10,12 +10,14 @@ exports.createUser = async ({ username, name, password, recovery }) => {
     }
 }
 
-exports.getUserByEmail = async ( username ) => {
+exports.getUserByEmail = async ( {username} ) => {
     try {
         return await prisma.user.findUnique({
             where: { username }
         })
     } catch (error) {
+        console.log(error);
+        
         throw new Error("Failed to retrive user")
     }
 }
