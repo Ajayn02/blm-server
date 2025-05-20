@@ -24,7 +24,7 @@ apiRouter.use("/search", watchRoutes)
 
 const PORT = 3001 || process.env.PORT
 
-server.listen(PORT, () => {
+server.listen(PORT,'0.0.0.0', () => {
     console.log(`server running at port ${PORT}`);
 })
 

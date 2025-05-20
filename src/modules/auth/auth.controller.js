@@ -7,10 +7,18 @@ const bcrypt = require('bcrypt')
 exports.signup = async (req, res) => {
     try {
         const { name, username, password } = req.body
+
         if (!name || !username || !password) {
             sendResponse(res, 400, false, "Name, Email and Password are required")
             return;
         }
+
+        const existing = await authService.getUserByEmail(username)
+        if (existing) {
+            sendResponse(res, 400, false, "Username already exist")
+            return;
+        }
+
         const recovery = generateRecoveryCode()
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await authService.createUser({ username, name, password: hashedPassword, recovery })
