@@ -13,7 +13,7 @@ exports.signup = async (req, res) => {
             return;
         }
 
-        const existing = await authService.getUserByEmail(username)
+        const existing = await authService.getUserByUsername(username)
         if (existing) {
             sendResponse(res, 400, false, "Username already exist")
             return;
@@ -36,7 +36,7 @@ exports.signin = async (req, res) => {
             sendResponse(res, 400, false, "Email and Password are required")
             return;
         }
-        const existing = await authService.getUserByEmail({ username })
+        const existing = await authService.getUserByUsername(username)
 
         if (!existing) {
             sendResponse(res, 404, false, "User not found")
@@ -67,7 +67,7 @@ exports.forgetPassword = async (req, res) => {
             return;
         }
 
-        const user = await authService.getUserByUsername({ username })
+        const user = await authService.getUserByUsername(username)
 
         if (!user || !user.recovery) {
             sendResponse(res, 404, false, "User not found")
